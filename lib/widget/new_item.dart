@@ -17,6 +17,7 @@ class _NewItemState extends State<NewItem> {
   final _formKey = GlobalKey<FormState>();
   var _enteredName = '';
   var _enteredQuantity = 1;
+  
   var _selectedCategory = categories[Categories.vegetables]!;
 
   void _saveItem() {
