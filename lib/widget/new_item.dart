@@ -27,7 +27,7 @@ class _NewItemState extends State<NewItem> {
       _formKey.currentState!.save();
       final url = Uri.https('joeshoppinglistapp-default-rtdb.firebaseio.com',
           'shopping-list.json');
-     final response = await http.post(
+      final response = await http.post(
         url,
         headers: {
           'Content-Type': 'application/json',
@@ -40,14 +40,21 @@ class _NewItemState extends State<NewItem> {
           },
         ),
       );
-      print(response.body);
-      print(response.statusCode);
 
-      if(!context.mounted){
+      final Map<String, dynamic> resDatata = json.decode(response.body);
+
+      if (!context.mounted) {
         return;
       }
 
-      Navigator.of(context).pop();
+      Navigator.of(context).pop(
+        GroceryItem(
+          id: resDatata['name'],
+          name: _enteredName,
+          quantity: _enteredQuantity,
+          category: _selectedCategory,
+        ),
+      );
     }
   }
 
