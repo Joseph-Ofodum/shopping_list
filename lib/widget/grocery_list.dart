@@ -69,10 +69,34 @@ class _GroceryListState extends State<GroceryList> {
     });
   }
 
-  void _removeItem(GroceryItem item) {
-    setState(() {
+  void _removeItem(GroceryItem item) async {
+    final index = _groceryItems.indexOf(item);
+
+     setState(() {
       _groceryItems.remove(item);
+    });  
+
+    final url = Uri.https(
+        'joeshoppinglistapp-default-rtdb.firebaseio.com', 'shopping-list/${item.id}.json');
+       final response = await  http.delete(url);
+
+      if(response.statusCode >= 400){
+        //optional you can show error message 
+        setState(() {
+      _groceryItems.insert(index, item);
+      _error = 'Failed to delete item. Please try again latter.';
+
     });
+
+    Future.delayed(const Duration(seconds: 1), () {
+      setState(() {
+        _error = null; // Clear error message
+      });
+
+    });
+
+      }
+   
   }
 
   @override
