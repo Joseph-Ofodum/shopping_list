@@ -26,8 +26,10 @@ class _GroceryListState extends State<GroceryList> {
   void _loadItems() async {
     final url = Uri.https(
         'joeshoppinglistapp-default-rtdb.firebaseio.com', 'shopping-list.json');
-    final response = await http.get(url);
-    if(response.statusCode >= 400){
+
+        try{
+          final response = await http.get(url);
+           if(response.statusCode >= 400){
       setState(() {
         _error = 'Failed to load items. please try again';
       });
@@ -40,7 +42,6 @@ class _GroceryListState extends State<GroceryList> {
       });
       return;
     }
-
 
     final Map<String, dynamic> listData = json.decode(response.body);
     final List<GroceryItem> loadedItems = [];
@@ -61,6 +62,14 @@ class _GroceryListState extends State<GroceryList> {
       _groceryItems = loadedItems;
       _isLoading = false;
     });
+
+        }catch(error){
+             setState(() {
+        _error = 'Something went wrong! please try again';
+      });
+        }
+    
+   
   }
 
   void _addItem() async {
